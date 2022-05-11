@@ -20,3 +20,16 @@ userForm.loginFormCallback = function(data) {// функция, которая �
 ApiConnector.login(data, callback);//ApiConnector.login({ login, password }, callback) — запрос на авторизацию пользователя
 }
 
+userForm.registerFormCallback = function(data) {
+    let callback = (response) => {
+        console.log(response);
+
+        if(!response.success) {
+            this.setRegisterErrorMessage(response.error);
+        } else {
+            location.reload();
+        }
+    }
+
+ApiConnector.register(data, callback);
+}
