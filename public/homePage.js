@@ -1,4 +1,7 @@
 "use strict"
+
+//const { response } = require("express");
+
 //npm start для запуска сервера
 //const { response } = require("express");
 
@@ -88,3 +91,41 @@ moneyManager.sendMoneyCallback = (data) => {
    });
 };
 
+
+const favoritesWidget = new FavoritesWidget();
+ApiConnector.getFavorites((response) => {
+   if (response.success) {
+      favoritesWidget.clearTable();
+      favoritesWidget.fillTable(response.data);
+      moneyManager.updateUsersList(response.data);
+   };
+   console.log(response);
+});
+
+favoritesWidget.addUserCallback = (data) => {
+   ApiConnector.addUserToFavorites(data, (response) => {
+      if (response.success) {
+         favoritesWidget.clearTable();
+         favoritesWidget.fillTable(response.data);
+         moneyManager.updateUsersList(response.data);
+         favoritesWidget.setMessage(true, 'Добавление успешно');
+      } else {
+         favoritesWidget.setMessage(false, response.error);
+      };
+      console.log(response);
+   });
+};
+
+favoritesWidget.removeUserCallback = (data) => {
+   ApiConnector.removeUserFromFavorites(data, (response) => {
+      if (response.success) {
+         favoritesWidget.clearTable();
+         favoritesWidget.fillTable(response.data);
+         moneyManager.updateUsersList(response.data);
+         favoritesWidget.setMessage(true, 'Удаление успешно');
+      } else {
+         favoritesWidget.setMessage(false, response.error);
+      };
+      console.log(response);
+   });
+};
